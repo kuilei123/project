@@ -34,8 +34,6 @@ class User(db.Model,UserMixin):
     @property
     def password(self):
         return self.password_hash
-
-
     @password.setter
     def password(self,value):
         #对密码签名
@@ -101,7 +99,7 @@ class Order(db.Model):
     ispay = db.Column(db.Integer, nullable=False)
 
 
-
+#发帖
 class Post(db.Model):
     __tablename__ = 'bbs_post'
 
@@ -110,7 +108,7 @@ class Post(db.Model):
     authorid = db.Column(db.Integer, nullable=False)
     title = db.Column(db.String(600), nullable=False)
     content = db.Column(db.String(3000), nullable=False)
-    addtime = db.Column(db.Integer, nullable=False)
+    addtime = db.Column(db.String(20), nullable=False)
     addip = db.Column(db.Integer, nullable=False)
     classid = db.Column(db.Integer, nullable=False)
     replycount = db.Column(db.Integer, nullable=False )
@@ -126,7 +124,7 @@ class Post(db.Model):
 
 
 
-
+#回帖
 class Reply(db.Model):
     __tablename__ = 'bbs_reply'
 

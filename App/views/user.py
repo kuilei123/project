@@ -56,7 +56,6 @@ def logout():
 @user.route('/show/')
 def show_yzm():
     vc=VerifyCode()
-
     # print(session['code'])
     result=vc.generate()
     session['code'] = vc.code

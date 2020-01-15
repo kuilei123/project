@@ -1,4 +1,5 @@
 import datetime
+import time
 import uuid
 
 
@@ -6,7 +7,7 @@ from flask import Blueprint, render_template, request
 from flask_login import login_required
 from sqlalchemy import func
 
-from App.models import Category, db, User, Link
+from App.models import Category, db, User, Link, Post
 
 bbs=Blueprint('bbs',__name__)
 
@@ -62,14 +63,35 @@ def index(cid=0):
 
 
 @bbs.route('/list/<int:cid>/')
-def list_category(cid):
-    print(cid,type(cid))
-    return "帖子"
+def list_post(cid):
+    posts=Post.query.filter(Post.classid==cid).all()
+    for post in posts:
+        if not post.isdel:
+            id=post.id
+            tid=post.tid
+            authorid=post.authorid
+            title=post.title
+            content=post.content
+            addtime=post.addtime
+            addip=post.addip
+            replycount=post.replycount
+            hits=post.hits
+            istop=post.istop
+            elite=post.elite
+            ishot=post.ishot
+            rate=post.rate
+            attachment=post.attachment
+            style=post.style
+            isdisplay=post.isdisplay
+        else:
+            continue
+
+    return render_template("index/list.html",**locals())
 
 
 @bbs.route('/publish/',methods=['GET','POST'])
 @login_required
-def publish_post():
+def publish_post(cid,rate):
     if request.method=='GET':
         return render_template('index/addc.html')
     if request.method=='POST':
@@ -78,8 +100,14 @@ def publish_post():
         authorid=db.session.id
         title=request.form.get('title')
         content=request.form.get('content')
-        addtime=datetime.datetime.now()
+        now=datetime.datetime.now()
+        addtime=int(time.mktime(now.timetuple()))
         addip=request.remote_addr
+        classid=cid
+        rate=rate
 
 
     return "发帖"
+
+
+
